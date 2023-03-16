@@ -2,9 +2,16 @@ import React, { Component } from "react";
 import API from "../config/api";
 
 class CreateArticle extends Component {
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.handleFormData = this.handleFormData.bind(this);
+        this.createNewArticle = this.createNewArticle.bind(this);
+    }
+
+    async createNewArticle(newArticle){
+        // post request to backend
+        const backendResponse = await API.post("/articles/add", newArticle);
+        return backendResponse;
     }
 
     handleFormData = event => {
@@ -17,12 +24,7 @@ class CreateArticle extends Component {
             "content": formData.get("title"),
             "title": formData.get("content")
         }
-
-        API.post("/articles/add", newArticle).then(res => {
-           console.log(res.data);
-        }).catch(err => {
-            console.log(err);
-        });
+        this.createNewArticle(newArticle);  
     }
 
     render (){
